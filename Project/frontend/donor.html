@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Donor Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+    <!-- Header -->
+
+    <header class="navbar">
+
+        <div class="logo">
+            🩸 Blood Bank
+        </div>
+
+        <button
+            onclick="logout()"
+            class="logout-btn"
+        >
+            Logout
+        </button>
+
+    </header>
+
+
+    <!-- Main -->
+
+    <main class="dashboard">
+
+        <h1>Donor Dashboard</h1>
+
+
+        <!-- Donor Information -->
+
+        <div
+            id="donorProfile"
+            class="dashboard-card"
+        >
+
+            Loading...
+
+        </div>
+
+
+        <!-- Donation History -->
+
+        <h2>Donation History</h2>
+
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Blood Group</th>
+
+                    <th>Units</th>
+
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="donationHistory">
+
+                <tr>
+
+                    <td colspan="4">
+                        Loading...
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Request Blood</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <div class="register-container">
+
+        <h1>Request Blood</h1>
+
+
+        <form id="requestForm">
+
+            <label>
+                Blood Group
+            </label>
+
+            <select
+                id="blood_group"
+                required>
+
+                <option value="">
+                    Select Blood Group
+                </option>
+
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+
+            </select>
+
+
+            <label>
+                Units Required
+            </label>
+
+            <input
+                type="number"
+                id="units_required"
+                min="1"
+                required>
+
+
+            <label>
+                Urgency
+            </label>
+
+            <select
+                id="urgency"
+                required>
+
+                <option value="Normal">
+                    Normal
+                </option>
+
+                <option value="Urgent">
+                    Urgent
+                </option>
+
+                <option value="Emergency">
+                    Emergency
+                </option>
+
+            </select>
+
+
+            <button type="submit">
+                Submit Request
+            </button>
+
+        </form>
+
+
+        <p id="requestMessage"></p>
+
+
+        <p>
+            <a href="hospital.html">
+                Back to Hospital Dashboard
+            </a>
+        </p>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

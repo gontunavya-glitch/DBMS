@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Hospital Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header class="navbar">
+
+        <div class="logo">
+            🩸 Blood Bank
+        </div>
+
+        <button
+            class="logout-btn"
+            onclick="logout()">
+            Logout
+        </button>
+
+    </header>
+
+
+    <!-- DASHBOARD -->
+
+    <main class="dashboard">
+
+        <h1>Hospital Dashboard</h1>
+
+
+        <!-- REQUEST BLOOD BUTTON -->
+
+        <button
+            class="request-btn"
+            onclick="openRequestPage()">
+            Request Blood
+        </button>
+
+
+        <h2>My Blood Requests</h2>
+
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Blood Group</th>
+
+                    <th>Units</th>
+
+                    <th>Urgency</th>
+
+                    <th>Status</th>
+
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="requestTable">
+
+                <tr>
+
+                    <td colspan="6">
+                        Loading...
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
