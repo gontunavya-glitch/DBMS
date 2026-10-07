@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeFlow | Blood Bank Management</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", sans-serif;
+        }
+
+        :root {
+            --red: #d90429;
+            --dark-red: #a80020;
+            --sidebar: #111827;
+            --sidebar-light: #1f2937;
+            --bg: #f5f7fb;
+            --white: #ffffff;
+            --text: #172033;
+            --muted: #7b8497;
+            --border: #e8ebf1;
+            --green: #16a34a;
+            --orange: #f59e0b;
+            --blue: #2563eb;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            width: 250px;
+            height: 100vh;
+            background: var(--sidebar);
+            color: white;
+            padding: 25px 18px;
+            left: 0;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 5px 10px 30px;
+        }
+
+        .logo-icon {
+            width: 43px;
+            height: 43px;
+            background: var(--red);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        .logo h2 {
+            font-size: 20px;
+        }
+
+        .logo small {
+            color: #9ca3af;
+            font-size: 10px;
+        }
+
+        .menu-title {
+            color: #6b7280;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 12px 13px;
+            text-transform: uppercase;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            margin: 5px 0;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 13px;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: .3s;
+            font-size: 14px;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: var(--red);
+            color: white;
+        }
+
+        .menu-icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-bottom {
+            position: absolute;
+            bottom: 25px;
+            left: 18px;
+            right: 18px;
+        }
+
+        .help {
+            background: var(--sidebar-light);
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 12px;
+            color: #cbd5e1;
+        }
+
+        .help strong {
+            display: block;
+            color: white;
+            margin-bottom: 6px;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 75px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+        }
+
+        .search {
+            width: 300px;
+            background: #f6f7fa;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 11px 15px;
+            outline: none;
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .icon-button {
+            width: 38px;
+            height: 38px;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 9px;
+            cursor: pointer;
+        }
+
+        .notification {
+            position: relative;
+        }
+
+        .notification span {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--red);
+            color: white;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            font-size: 9px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            background: #fee2e2;
+            color: var(--red);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+        }
+
+        .profile-text strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .profile-text small {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        /* CONTENT */
+
+        .content {
+            padding: 30px 35px;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h1 {
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .welcome p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* CARDS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            transition: .3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,.07);
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-icon {
+            width: 43px;
+            height: 43px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .red-icon {
+            background: #fee2e2;
+        }
+
+        .blue-icon {
+            background: #dbeafe;
+        }
+
+        .green-icon {
+            background: #dcfce7;
+        }
+
+        .orange-icon {
+            background: #fef3c7;
+        }
+
+        .stat-card h3 {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 16px;
+            font-weight: 500;
+        }
+
+        .stat-number {
+            font-size: 27px;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        .increase {
+            color: var(--green);
+            font-size: 10px;
+            margin-top: 6px;
+        }
+
+        /* GRID */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 20px;
+        }
+
+        .box {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .box-header h2 {
+            font-size: 16px;
+        }
+
+        .view {
+            color: var(--red);
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* BLOOD */
+
+        .blood-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .blood-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 17px 10px;
+            text-align: center;
+            transition: .3s;
+        }
+
+        .blood-card:hover {
+            border-color: #fca5a5;
+            background: #fff8f8;
+        }
+
+        .blood-drop {
+            width: 43px;
+            height: 43px;
+            background: #fee2e2;
+            color: var(--red);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        .blood-card h3 {
+            margin-top: 10px;
+            font-size: 19px;
+        }
+
+        .blood-card p {
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .progress {
+            height: 5px;
+            background: #edf0f4;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress span {
+            display: block;
+            height: 100%;
+            background: var(--red);
+            border-radius: 10px;
+        }
+
+        /* EMERGENCY */
+
+        .emergency {
+            border: 1px solid #fecaca;
+            background: #fff8f8;
+        }
+
+        .emergency-label {
+            color: var(--red);
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .emergency h2 {
+            font-size: 20px;
+        }
+
+        .emergency p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .hospital {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 18px;
+            padding-top: 15px;
+            border-top: 1px solid #f1d3d3;
+        }
+
+        .hospital strong {
+            font-size: 13px;
+        }
+
+        .hospital small {
+            display: block;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .urgent {
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 7px;
+            padding: 9px 13px;
+            cursor: pointer;
+        }
+
+        /* TABLE */
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            font-size: 11px;
+            color: var(--muted);
+            background: #fafbfc;
+            padding: 13px;
+        }
+
+        td {
+            padding: 14px 13px;
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .status {
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .approved {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .pending {
+            background: #fef3c7;
+            color: #a16207;
+        }
+
+        .critical {
+            background: #fee2e2;
+            color: var(--red);
+        }
+
+        /* PAGES */
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            font-size: 25px;
+        }
+
+        .page-title p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        /* BUTTON */
+
+        .primary {
+            background: var(--red);
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .primary:hover {
+            background: var(--dark-red);
+        }
+
+        /* FORM */
+
+        .form-box {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            max-width: 800px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--red);
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width: 1100px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 700px) {
+            .sidebar {
+                width: 70px;
+                padding: 20px 10px;
+            }
+
+            .logo h2,
+            .logo small,
+            .menu a span,
+            .menu-title,
+            .help {
+                display: none;
+            }
+
+            .logo {
+                justify-content: center;
+                padding-bottom: 20px;
+            }
+
+            .menu a {
+                justify-content: center;
+            }
+
+            .main {
+                margin-left: 70px;
+            }
+
+            .topbar {
+                padding: 0 15px;
+            }
+
+            .search {
+                width: 150px;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .blood-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+    <div class="logo">
+        <div class="logo-icon">🩸</div>
+
+        <div>
+            <h2>LifeFlow</h2>
+            <small>BLOOD BANK SYSTEM</small>
+        </div>
+    </div>
+
+    <div class="menu-title">MAIN MENU</div>
+
+    <ul class="menu">
+
+        <li>
+            <a class="active" onclick="showPage('dashboard', this)">
+                <span class="menu-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+        <li>
+            <a onclick="showPage('donors', this)">
+                <span class="menu-icon">♙</span>
+                <span>Donors</span>
+            </a>
+        </li>
+
+        <li>
+            <a onclick="showPage('inventory', this)">
+                <span class="menu-icon">🩸</span>
+                <span>Blood Inventory</span>
+            </a>
+        </li>
+
+        <li>
+            <a onclick="showPage('hospitals', this)">
+                <span class="menu-icon">🏥</span>
+                <span>Hospitals</span>
+            </a>
+        </li>
+
+        <li>
+            <a onclick="showPage('requests', this)">
+                <span class="menu-icon">▤</span>
+                <span>Blood Requests</span>
+            </a>
+        </li>
+
+    </ul>
+
+    <div class="menu-title">MANAGEMENT</div>
+
+    <ul class="menu">
+
+        <li>
+            <a onclick="showPage('register', this)">
+                <span class="menu-icon">＋</span>
+                <span>Register Donor</span>
+            </a>
+        </li>
+
+        <li>
+            <a onclick="showPage('emergency', this)">
+                <span class="menu-icon">⚠</span>
+                <span>Emergency</span>
+            </a>
+        </li>
+
+        <li>
+            <a onclick="alert('Reports module coming soon')">
+                <span class="menu-icon">▥</span>
+                <span>Reports</span>
+            </a>
+        </li>
+
+    </ul>
+
+    <div class="sidebar-bottom">
+
+        <div class="help">
+            <strong>Need Help?</strong>
+            Contact the system administrator for assistance.
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- MAIN -->
+<main class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+
+        <input
+            class="search"
+            type="text"
+            placeholder="⌕  Search anything..."
+        >
+
+        <div class="top-right">
+
+            <button class="icon-button notification">
+                🔔
+                <span>3</span>
+            </button>
+
+            <button
+                class="icon-button"
+                onclick="toggleDark()">
+                🌙
+            </button>
+
+            <div class="profile">
+
+                <div class="avatar">A</div>
+
+                <div class="profile-text">
+                    <strong>Admin User</strong>
+                    <small>Administrator</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <div class="content">
+
+
+        <!-- DASHBOARD -->
+
+        <section id="dashboard" class="page active">
+
+            <div class="welcome">
+
+                <h1>Good Morning, Admin 👋</h1>
+
+                <p>
+                    Here's what's happening with your blood bank today.
+                </p>
+
+            </div>
+
+
+            <!-- STATISTICS -->
+
+            <div class="stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div>
+                            <div class="stat-icon red-icon">♙</div>
+                        </div>
+
+                    </div>
+
+                    <h3>Total Donors</h3>
+
+                    <div class="stat-number" id="donorCount">
+                        1,248
+                    </div>
+
+                    <div class="increase">
+                        ↑ 12.5% this month
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon blue-icon">
+                            🩸
+                        </div>
+
+                    </div>
+
+                    <h3>Available Units</h3>
+
+                    <div class="stat-number">
+                        520
+                    </div>
+
+                    <div class="increase">
+                        ↑ 8.2% this week
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon green-icon">
+                            ▤
+                        </div>
+
+                    </div>
+
+                    <h3>Blood Requests</h3>
+
+                    <div class="stat-number">
+                        36
+                    </div>
+
+                    <div class="increase">
+                        24 approved today
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-icon orange-icon">
+                            ⚠
+                        </div>
+
+                    </div>
+
+                    <h3>Emergency Requests</h3>
+
+                    <div class="stat-number">
+                        08
+                    </div>
+
+                    <div style="color:#d97706;font-size:10px;margin-top:6px">
+                        Requires attention
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DASHBOARD GRID -->
+
+            <div class="dashboard-grid">
+
+                <!-- BLOOD INVENTORY -->
+
+                <div class="box">
+
+                    <div class="box-header">
+
+                        <h2>Blood Stock Overview</h2>
+
+                        <span
+                            class="view"
+                            onclick="showPage('inventory')">
+                            View Inventory →
+                        </span>
+
+                    </div>
+
+                    <div class="blood-grid">
+
+                        <div class="blood-card">
+                            <div class="blood-drop">A+</div>
+                            <h3>85</h3>
+                            <p>Units Available</p>
+                            <div class="progress">
+                                <span style="width:85%"></span>
+                            </div>
+                        </div>
+
+                        <div class="blood-card">
+                            <div class="blood-drop">A−</div>
+                            <h3>40</h3>
+                            <p>Units Available</p>
+                            <div class="progress">
+                                <span style="width:40%"></span>
+                            </div>
+                        </div>
+
+                        <div class="blood-card">
+                            <div class="blood-drop">B+</div>
+                            <h3>72</h3>
+                            <p>Units Available</p>
+                            <div class="progress">
+                                <span style="width:72%"></span>
+                            </div>
+                        </div>
+
+                        <div class="blood-card">
+                            <div class="blood-drop">B−</div>
+                            <h3>28</h3>
+                            <p>Units Available</p>
+                            <div class="progress">
+                                <span style="width:28%"></span>
+                            </div>
+                        </div>
+
+                        <div class="blood-card">
+                            <div class="blood-drop">AB+</div>
+                            <h3>65</h3>
+                            <p>Units Available</p>
+                            <div class="progress">
+                                <span style="width:65%"></span>
+                            </div>
+                        </div>
+
+                        <div class="blood-card">
+                            <div class="blood-drop">AB−</div>
+                            <h3>20</h3>
+                            <p>Units Available</p>
+                            <div class="progress">
+                                <span style="width:20%"></span>
+                            </div>
+                        </div>
+
+                        <div class="blood-card">
+                            <div class="blood-drop">O+</div>
+                            <h3>145</h3>
+                            <p>Units Available</p>
+                            <div class="progress">
+                                <span style="width:95%"></span>
+                            </div>
+                        </div>
+
+                        <div class="blood-card">
+                            <div class="blood-drop">O−</div>
+                            <h3>65</h3>
+                            <p>Units Available</p>
+                            <div class="progress">
+                                <span style="width:65%"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMERGENCY -->
+
+                <div class="box emergency">
+
+                    <div class="emergency-label">
+                        🚨 Emergency Request
+                    </div>
+
+                    <h2>O− Blood Required</h2>
+
+                    <p>
+                        Critical blood requirement received from
+                        City Care Hospital.
+                    </p>
+
+                    <div class="hospital">
+
+                        <div>
+                            <strong>City Care Hospital</strong>
+                            <small>2 units required</small>
+                        </div>
+
+                        <button
+                            class="urgent"
+                            onclick="alert('Emergency request approved!')">
+                            Respond
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RECENT REQUESTS -->
+
+            <div class="box">
+
+                <div class="box-header">
+
+                    <h2>Recent Blood Requests</h2>
+
+                    <span
+                        class="view"
+                        onclick="showPage('requests')">
+                        View All →
+                    </span>
+
+                </div>
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>REQUEST ID</th>
+                            <th>PATIENT</th>
+                            <th>HOSPITAL</th>
+                            <th>BLOOD GROUP</th>
+                            <th>UNITS</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>#REQ-1024</td>
+                            <td>Rahul Kumar</td>
+                            <td>City Care Hospital</td>
+                            <td><b>O+</b></td>
+                            <td>2</td>
+                            <td>
+                                <span class="status approved">
+                                    Approved
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>#REQ-1023</td>
+                            <td>Anjali Rao</td>
+                            <td>Sunrise Hospital</td>
+                            <td><b>A+</b></td>
+                            <td>3</td>
+                            <td>
+                                <span class="status pending">
+                                    Pending
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>#REQ-1022</td>
+                            <td>Vikram Singh</td>
+                            <td>LifeCare Hospital</td>
+                            <td><b>B−</b></td>
+                            <td>1</td>
+                            <td>
+                                <span class="status approved">
+                                    Approved
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>#REQ-1021</td>
+                            <td>Priya Sharma</td>
+                            <td>Metro Hospital</td>
+                            <td><b>AB+</b></td>
+                            <td>2</td>
+                            <td>
+                                <span class="status critical">
+                                    Critical
+                                </span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- DONORS -->
+
+        <section id="donors" class="page">
+
+            <div class="page-title">
+
+                <h1>Donor Management</h1>
+
+                <p>
+                    Manage registered blood donors.
+                </p>
+
+            </div>
+
+            <div class="box">
+
+                <div class="box-header">
+
+                    <h2>Registered Donors</h2>
+
+                    <button
+                        class="primary"
+                        onclick="showPage('register')">
+                        + Register Donor
+                    </button>
+
+                </div>
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>DONOR NAME</th>
+                            <th>AGE</th>
+                            <th>BLOOD GROUP</th>
+                            <th>PHONE</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>D001</td>
+                            <td>Arjun Kumar</td>
+                            <td>25</td>
+                            <td>A+</td>
+                            <td>9876543210</td>
+                            <td>
+                                <span class="status approved">
+                                    Active
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>D002</td>
+                            <td>Priya Sharma</td>
+                            <td>29</td>
+                            <td>O+</td>
+                            <td>9876501234</td>
+                            <td>
+                                <span class="status approved">
+                                    Active
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>D003</td>
+                            <td>Rahul Reddy</td>
+                            <td>31</td>
+                            <td>B+</td>
+                            <td>9988776655</td>
+                            <td>
+                                <span class="status approved">
+                                    Active
+                                </span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- INVENTORY -->
+
+        <section id="inventory" class="page">
+
+            <div class="page-title">
+
+                <h1>Blood Inventory</h1>
+
+                <p>
+                    Monitor available blood units.
+                </p>
+
+            </div>
+
+            <div class="box">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>BLOOD GROUP</th>
+                            <th>AVAILABLE</th>
+                            <th>MINIMUM LEVEL</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td><b>A+</b></td>
+                            <td>85 Units</td>
+                            <td>30 Units</td>
+                            <td><span class="status approved">Healthy</span></td>
+                        </tr>
+
+                        <tr>
+                            <td><b>A−</b></td>
+                            <td>40 Units</td>
+                            <td>20 Units</td>
+                            <td><span class="status approved">Healthy</span></td>
+                        </tr>
+
+                        <tr>
+                            <td><b>B+</b></td>
+                            <td>72 Units</td>
+                            <td>30 Units</td>
+                            <td><span class="status approved">Healthy</span></td>
+                        </tr>
+
+                        <tr>
+                            <td><b>B−</b></td>
+                            <td>28 Units</td>
+                            <td>20 Units</td>
+                            <td><span class="status pending">Low</span></td>
+                        </tr>
+
+                        <tr>
+                            <td><b>AB+</b></td>
+                            <td>65 Units</td>
+                            <td>20 Units</td>
+                            <td><span class="status approved">Healthy</span></td>
+                        </tr>
+
+                        <tr>
+                            <td><b>AB−</b></td>
+                            <td>20 Units</td>
+                            <td>15 Units</td>
+                            <td><span class="status pending">Low</span></td>
+                        </tr>
+
+                        <tr>
+                            <td><b>O+</b></td>
+                            <td>145 Units</td>
+                            <td>40 Units</td>
+                            <td><span class="status approved">Healthy</span></td>
+                        </tr>
+
+                        <tr>
+                            <td><b>O−</b></td>
+                            <td>65 Units</td>
+                            <td>25 Units</td>
+                            <td><span class="status approved">Healthy</span></td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- HOSPITALS -->
+
+        <section id="hospitals" class="page">
+
+            <div class="page-title">
+
+                <h1>Hospital Management</h1>
+
+                <p>
+                    Registered hospitals and medical centers.
+                </p>
+
+            </div>
+
+            <div class="box">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>HOSPITAL ID</th>
+                            <th>HOSPITAL NAME</th>
+                            <th>LOCATION</th>
+                            <th>CONTACT</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>H001</td>
+                            <td>City Care Hospital</td>
+                            <td>Vijayawada</td>
+                            <td>0866-2456789</td>
+                            <td><span class="status approved">Active</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>H002</td>
+                            <td>Sunrise Hospital</td>
+                            <td>Guntur</td>
+                            <td>0863-2345678</td>
+                            <td><span class="status approved">Active</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>H003</td>
+                            <td>LifeCare Hospital</td>
+                            <td>Hyderabad</td>
+                            <td>040-2567890</td>
+                            <td><span class="status approved">Active</span></td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- REQUESTS -->
+
+        <section id="requests" class="page">
+
+            <div class="page-title">
+
+                <h1>Blood Requests</h1>
+
+                <p>
+                    Track and manage blood requests.
+                </p>
+
+            </div>
+
+            <div class="box">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>REQUEST ID</th>
+                            <th>PATIENT</th>
+                            <th>HOSPITAL</th>
+                            <th>GROUP</th>
+                            <th>UNITS</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>REQ-1024</td>
+                            <td>Rahul Kumar</td>
+                            <td>City Care</td>
+                            <td>O+</td>
+                            <td>2</td>
+                            <td><span class="status approved">Approved</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>REQ-1023</td>
+                            <td>Anjali Rao</td>
+                            <td>Sunrise</td>
+                            <td>A+</td>
+                            <td>3</td>
+                            <td><span class="status pending">Pending</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>REQ-1022</td>
+                            <td>Vikram Singh</td>
+                            <td>LifeCare</td>
+                            <td>B−</td>
+                            <td>1</td>
+                            <td><span class="status approved">Approved</span></td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- REGISTER DONOR -->
+
+        <section id="register" class="page">
+
+            <div class="page-title">
+
+                <h1>Register New Donor</h1>
+
+                <p>
+                    Add a new donor to the blood bank.
+                </p>
+
+            </div>
+
+            <div class="form-box">
+
+                <form onsubmit="registerDonor(event)">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label>Full Name</label>
+
+                            <input
+                                id="name"
+                                type="text"
+                                placeholder="Enter donor name"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Age</label>
+
+                            <input
+                                id="age"
+                                type="number"
+                                placeholder="Enter age"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Blood Group</label>
+
+                            <select id="blood" required>
+
+                                <option value="">
+                                    Select Blood Group
+                                </option>
+
+                                <option>A+</option>
+                                <option>A−</option>
+                                <option>B+</option>
+                                <option>B−</option>
+                                <option>AB+</option>
+                                <option>AB−</option>
+                                <option>O+</option>
+                                <option>O−</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Phone Number</label>
+
+                            <input
+                                id="phone"
+                                type="tel"
+                                placeholder="Enter phone number"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="form-group full">
+
+                            <label>Email</label>
+
+                            <input
+                                id="email"
+                                type="email"
+                                placeholder="Enter email address"
+                            >
+
+                        </div>
+
+                        <div class="form-group full">
+
+                            <button
+                                class="primary"
+                                type="submit">
+                                Register Donor
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- EMERGENCY -->
+
+        <section id="emergency" class="page">
+
+            <div class="page-title">
+
+                <h1>Emergency Blood Requests 🚨</h1>
+
+                <p>
+                    Critical blood requirements requiring immediate attention.
+                </p>
+
+            </div>
+
+            <div class="box emergency">
+
+                <div class="emergency-label">
+                    CRITICAL REQUEST
+                </div>
+
+                <h2>O− Blood Required</h2>
+
+                <p>
+                    City Care Hospital requires 2 units of O− blood
+                    immediately.
+                </p>
+
+                <div class="hospital">
+
+                    <div>
+                        <strong>City Care Hospital</strong>
+                        <small>Emergency Department</small>
+                    </div>
+
+                    <button
+                        class="urgent"
+                        onclick="alert('Request accepted successfully!')">
+                        Accept Request
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<script>
+
+    /* PAGE NAVIGATION */
+
+    function showPage(pageId, element) {
+
+        document.querySelectorAll(".page").forEach(page => {
+            page.classList.remove("active");
+        });
+
+        document.getElementById(pageId).classList.add("active");
+
+        document.querySelectorAll(".menu a").forEach(link => {
+            link.classList.remove("active");
+        });
+
+        if (element) {
+            element.classList.add("active");
+        }
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
+
+    /* REGISTER DONOR */
+
+    function registerDonor(event) {
+
+        event.preventDefault();
+
+        const name =
+            document.getElementById("name").value;
+
+        const blood =
+            document.getElementById("blood").value;
+
+        let count =
+            document.getElementById("donorCount");
+
+        let current =
+            parseInt(count.innerText.replace(",", ""));
+
+        current++;
+
+        count.innerText =
+            current.toLocaleString();
+
+        alert(
+            "✓ Donor registered successfully!\n\n" +
+            "Donor: " + name +
+            "\nBlood Group: " + blood
+        );
+
+        event.target.reset();
+    }
+
+
+    /* DARK MODE */
+
+    function toggleDark() {
+
+        document.body.classList.toggle("dark-mode");
+
+        if (document.body.classList.contains("dark-mode")) {
+
+            document.documentElement.style.setProperty(
+                "--bg", "#0f172a"
+            );
+
+            document.documentElement.style.setProperty(
+                "--white", "#1e293b"
+            );
+
+            document.documentElement.style.setProperty(
+                "--text", "#f8fafc"
+            );
+
+            document.documentElement.style.setProperty(
+                "--border", "#334155"
+            );
+
+        } else {
+
+            document.documentElement.style.setProperty(
+                "--bg", "#f5f7fb"
+            );
+
+            document.documentElement.style.setProperty(
+                "--white", "#ffffff"
+            );
+
+            document.documentElement.style.setProperty(
+                "--text", "#172033"
+            );
+
+            document.documentElement.style.setProperty(
+                "--border", "#e8ebf1"
+            );
+        }
+    }
+
+</script>
+
+</body>
+</html>
